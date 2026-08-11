@@ -1,6 +1,6 @@
 package de.cyzetlc.smp.service;
 
-import eu.cyzetlc.cyzeapi.utils.entity.SystemPlayer;
+import de.cyzetlc.smp.model.SystemPlayer;
 
 import java.util.UUID;
 
