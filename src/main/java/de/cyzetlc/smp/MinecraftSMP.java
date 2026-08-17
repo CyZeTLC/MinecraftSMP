@@ -1,5 +1,7 @@
 package de.cyzetlc.smp;
 
+import de.cyzetlc.smp.commands.CommandService;
+import de.cyzetlc.smp.commands.ICommandService;
 import de.cyzetlc.smp.config.JsonConfig;
 import de.cyzetlc.smp.handler.database.MySQLCredentials;
 import de.cyzetlc.smp.handler.database.QueryHandler;
@@ -18,14 +20,16 @@ public class MinecraftSMP extends JavaPlugin {
     private QueryHandler queryHandler;
     private MessageHandler messageHandler;
     private ExecutorService executorService;
+    private ICommandService commandService;
 
     @Override
     public void onEnable() {
         super.onEnable();
         instance = this;
 
-        this.messageHandler = new MessageHandler();
         this.executorService = Executors.newCachedThreadPool();
+        this.messageHandler = new MessageHandler();
+        this.commandService = new CommandService();
 
         this.loadMySQL();
     }
