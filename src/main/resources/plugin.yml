@@ -1,0 +1,6 @@
+name: MinecraftSMP
+author: CyZeTLC
+version: 1.0
+main: de.cyzetlc.smp.MinecraftSMP
+description: MinecraftSMP Plugin
+website: https://docs.cyzetlc.de/minecraftsmp/
