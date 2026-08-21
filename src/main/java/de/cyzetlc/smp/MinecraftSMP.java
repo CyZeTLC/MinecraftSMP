@@ -6,6 +6,8 @@ import de.cyzetlc.smp.config.JsonConfig;
 import de.cyzetlc.smp.handler.database.MySQLCredentials;
 import de.cyzetlc.smp.handler.database.QueryHandler;
 import de.cyzetlc.smp.handler.message.MessageHandler;
+import de.cyzetlc.smp.listener.PlayerChatListener;
+import de.cyzetlc.smp.listener.PlayerConnectionListener;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,6 +34,12 @@ public class MinecraftSMP extends JavaPlugin {
         this.commandService = new CommandService();
 
         this.loadMySQL();
+        this.loadListeners();
+    }
+
+    private void loadListeners() {
+        this.getServer().getPluginManager().registerEvents(new PlayerConnectionListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerChatListener(this), this);
     }
 
     private void loadMySQL() {
