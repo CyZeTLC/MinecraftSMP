@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Getter
-public abstract class BaseCommand implements CommandExecutor {
+public abstract class BaseCommand {
     private String command;
     private String permission;
     private String[] aliases;
