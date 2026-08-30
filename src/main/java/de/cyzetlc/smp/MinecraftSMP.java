@@ -24,6 +24,8 @@ public class MinecraftSMP extends JavaPlugin {
     private ExecutorService executorService;
     private ICommandService commandService;
 
+    private JsonConfig jsonConfig;
+
     @Override
     public void onEnable() {
         super.onEnable();
@@ -32,6 +34,7 @@ public class MinecraftSMP extends JavaPlugin {
         this.executorService = Executors.newCachedThreadPool();
         this.messageHandler = new MessageHandler();
         this.commandService = new CommandService();
+        this.jsonConfig = new JsonConfig(this.getName() + "/config.json");
 
         this.loadMySQL();
         this.loadListeners();
