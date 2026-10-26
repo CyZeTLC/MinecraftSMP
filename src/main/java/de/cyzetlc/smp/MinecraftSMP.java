@@ -2,6 +2,8 @@ package de.cyzetlc.smp;
 
 import de.cyzetlc.smp.commands.CommandService;
 import de.cyzetlc.smp.commands.ICommandService;
+import de.cyzetlc.smp.commands.impl.SMPCommand;
+import de.cyzetlc.smp.commands.impl.TPACommand;
 import de.cyzetlc.smp.config.JsonConfig;
 import de.cyzetlc.smp.handler.database.MySQLCredentials;
 import de.cyzetlc.smp.handler.database.QueryHandler;
@@ -38,11 +40,17 @@ public class MinecraftSMP extends JavaPlugin {
 
         this.loadMySQL();
         this.loadListeners();
+        this.loadCommands();
     }
 
     private void loadListeners() {
         this.getServer().getPluginManager().registerEvents(new PlayerConnectionListener(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerChatListener(this), this);
+    }
+
+    private void loadCommands() {
+        this.commandService.registerCommand(new TPACommand());
+        this.commandService.registerCommand(new SMPCommand());
     }
 
     private void loadMySQL() {
