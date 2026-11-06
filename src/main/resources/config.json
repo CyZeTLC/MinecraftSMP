@@ -1,4 +1,5 @@
 {
   "displayConnectionMessages": true,
-  "useCustomChatFormat": true
+  "useCustomChatFormat": true,
+  "spawnRadius": 50
 }
