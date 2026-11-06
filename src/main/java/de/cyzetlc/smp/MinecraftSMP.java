@@ -9,6 +9,8 @@ import de.cyzetlc.smp.config.JsonConfig;
 import de.cyzetlc.smp.handler.database.MySQLCredentials;
 import de.cyzetlc.smp.handler.database.QueryHandler;
 import de.cyzetlc.smp.handler.message.MessageHandler;
+import de.cyzetlc.smp.listener.BlockListener;
+import de.cyzetlc.smp.listener.DamageListener;
 import de.cyzetlc.smp.listener.PlayerChatListener;
 import de.cyzetlc.smp.listener.PlayerConnectionListener;
 import lombok.Getter;
@@ -47,6 +49,8 @@ public class MinecraftSMP extends JavaPlugin {
     private void loadListeners() {
         this.getServer().getPluginManager().registerEvents(new PlayerConnectionListener(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerChatListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new BlockListener(), this);
+        this.getServer().getPluginManager().registerEvents(new DamageListener(), this);
     }
 
     private void loadCommands() {
