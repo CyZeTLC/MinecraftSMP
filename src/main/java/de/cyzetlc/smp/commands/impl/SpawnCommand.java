@@ -1,14 +1,11 @@
 package de.cyzetlc.smp.commands.impl;
 
-import de.cyzetlc.smp.MinecraftSMP;
 import de.cyzetlc.smp.annotation.CommandSpecification;
 import de.cyzetlc.smp.commands.BaseCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.HashMap;
 
 @CommandSpecification(
         command = "spawn",
