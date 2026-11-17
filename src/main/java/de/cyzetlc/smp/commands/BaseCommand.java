@@ -33,10 +33,11 @@ public abstract class BaseCommand {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
 
-                if (this.getPlayerCooldown(p.getUniqueId()) > System.currentTimeMillis()) {
-                    this.sendMessage(sender, "smp.command.failure.cooldown", this.formatTimeToString(
-                            System.currentTimeMillis() - this.getPlayerCooldown(p.getUniqueId())
-                    ));
+                long cooldownEnd = this.getPlayerCooldown(p.getUniqueId());
+                long remainingTime = cooldownEnd - System.currentTimeMillis();
+
+                if (cooldownEnd > 0 && remainingTime > 0) {
+                    this.sendMessage(sender, "smp.command.failure.cooldown", this.formatTimeToString(remainingTime));
                     return;
                 } else {
                     if (this.getCooldownValue() > 0) {
