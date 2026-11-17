@@ -3,7 +3,6 @@ package de.cyzetlc.smp.commands;
 import com.google.common.base.Joiner;
 import de.cyzetlc.smp.MinecraftSMP;
 import de.cyzetlc.smp.annotation.CommandSpecification;
-import de.cyzetlc.smp.util.reflection.FastReflection;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -12,7 +11,6 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -127,38 +125,22 @@ public abstract class BaseCommand {
     }
 
     public void register() {
-        try {
-            Command cmd = new Command(this.getCommand()) {
-                public boolean execute(CommandSender sender, String label, String[] args) {
-                    executeCommand(sender, label, args);
-                    return true;
-                }
-            };
-            cmd.setAliases(Arrays.asList(this.getAliases()));
-            Class<?> craftServerClass = FastReflection.obcClass("CraftServer");
-            Field commandMapField = craftServerClass.getDeclaredField("commandMap");
-            commandMapField.setAccessible(true);
-            CommandMap commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
-            if (commandMap.getCommand(this.getCommand()) != null) {
-                commandMap.getCommand(this.getCommand()).unregister(commandMap);
+        Command cmd = new Command(this.getCommand()) {
+            public boolean execute(CommandSender sender, String label, String[] args) {
+                executeCommand(sender, label, args);
+                return true;
             }
+        };
+        cmd.setAliases(Arrays.asList(this.getAliases()));
 
-            try {
-                Field f = commandMap.getClass().getDeclaredField("knownCommands");
-                f.setAccessible(true);
-                Map<String, Command> cmds = (Map) f.get(commandMap);
-                if (cmds.containsKey(this.getCommand())) {
-                    cmds.remove(this.getCommand());
-                    f.set(commandMap, cmds);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        CommandMap commandMap = Bukkit.getCommandMap();
 
-            commandMap.register(MinecraftSMP.getInstance().getName(), cmd);
-        } catch (Exception var8) {
-            var8.printStackTrace();
+        if (commandMap.getCommand(this.getCommand()) != null) {
+            commandMap.getCommand(this.getCommand()).unregister(commandMap);
         }
+
+        commandMap.getKnownCommands().remove(this.getCommand());
+        commandMap.register(MinecraftSMP.getInstance().getName(), cmd);
     }
 
     private float mapValue(float value, float maxIn, float maxOut) {
