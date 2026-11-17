@@ -4,6 +4,7 @@ import de.cyzetlc.smp.commands.CommandService;
 import de.cyzetlc.smp.commands.ICommandService;
 import de.cyzetlc.smp.commands.impl.*;
 import de.cyzetlc.smp.config.JsonConfig;
+import de.cyzetlc.smp.handler.clan.ClanHandler;
 import de.cyzetlc.smp.handler.database.MySQLCredentials;
 import de.cyzetlc.smp.handler.database.QueryHandler;
 import de.cyzetlc.smp.handler.message.MessageHandler;
@@ -26,6 +27,7 @@ public class MinecraftSMP extends JavaPlugin {
     private MessageHandler messageHandler;
     private ExecutorService executorService;
     private ICommandService commandService;
+    private ClanHandler clanHandler;
 
     private JsonConfig jsonConfig;
 
@@ -42,6 +44,8 @@ public class MinecraftSMP extends JavaPlugin {
         this.jsonConfig = new JsonConfig(this.getName() + "/config.json");
 
         this.loadMySQL();
+        this.clanHandler = new ClanHandler();
+        this.clanHandler.load();
         this.loadListeners();
         this.loadCommands();
         this.loadEndEnabledSetting();
@@ -60,6 +64,8 @@ public class MinecraftSMP extends JavaPlugin {
         this.commandService.registerCommand(new TPACommand());
         this.commandService.registerCommand(new SMPCommand());
         this.commandService.registerCommand(new SpawnCommand());
+        this.commandService.registerCommand(new ClanCommand());
+        this.commandService.registerCommand(new StatsCommand());
     }
 
     private void loadMySQL() {
