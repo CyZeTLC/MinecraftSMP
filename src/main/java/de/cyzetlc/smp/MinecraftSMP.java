@@ -41,7 +41,7 @@ public class MinecraftSMP extends JavaPlugin {
         this.executorService = Executors.newCachedThreadPool();
         this.messageHandler = new MessageHandler();
         this.commandService = new CommandService();
-        this.jsonConfig = new JsonConfig(this.getName() + "/config.json");
+        this.jsonConfig = new JsonConfig("./plugins/" + this.getName() + "/config.json");
         this.clanHandler = new ClanHandler();
 
         this.loadMySQL();
