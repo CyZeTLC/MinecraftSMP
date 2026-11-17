@@ -2,17 +2,18 @@ package de.cyzetlc.smp;
 
 import de.cyzetlc.smp.commands.CommandService;
 import de.cyzetlc.smp.commands.ICommandService;
-import de.cyzetlc.smp.commands.impl.SMPCommand;
-import de.cyzetlc.smp.commands.impl.SpawnCommand;
-import de.cyzetlc.smp.commands.impl.TPACommand;
+import de.cyzetlc.smp.commands.impl.*;
 import de.cyzetlc.smp.config.JsonConfig;
 import de.cyzetlc.smp.handler.database.MySQLCredentials;
 import de.cyzetlc.smp.handler.database.QueryHandler;
 import de.cyzetlc.smp.handler.message.MessageHandler;
 import de.cyzetlc.smp.listener.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.sql.rowset.CachedRowSet;
+import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,6 +29,8 @@ public class MinecraftSMP extends JavaPlugin {
 
     private JsonConfig jsonConfig;
 
+    private boolean endIsEnabled = false;
+
     @Override
     public void onEnable() {
         super.onEnable();
@@ -41,6 +44,7 @@ public class MinecraftSMP extends JavaPlugin {
         this.loadMySQL();
         this.loadListeners();
         this.loadCommands();
+        this.loadEndEnabledSetting();
     }
 
     private void loadListeners() {
@@ -49,6 +53,7 @@ public class MinecraftSMP extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         this.getServer().getPluginManager().registerEvents(new DamageListener(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerSessionListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new PortalListener(), this);
     }
 
     private void loadCommands() {
@@ -59,6 +64,22 @@ public class MinecraftSMP extends JavaPlugin {
 
     private void loadMySQL() {
         this.queryHandler = new QueryHandler(new JsonConfig("./plugins/MinecraftSMP/mysql.json").load(MySQLCredentials.class));
+    }
+
+    public void loadEndEnabledSetting() {
+        try (CachedRowSet rs = this.queryHandler.createBuilder("SELECT endEnabled FROM worldSettings").executeQuerySync()) {
+            endIsEnabled = rs.getBoolean("ebdEnabled");
+        } catch (SQLException exception) {
+            endIsEnabled = false;
+        }
+    }
+
+    public void setEndIsEnabled(boolean endIsEnabled) {
+        this.endIsEnabled = endIsEnabled;
+
+        this.queryHandler.createBuilder(
+                "UPDATE worldSettings SET endEnabled = ?"
+        ).addParameter(endIsEnabled).executeUpdateAsync();
     }
 
     @Override
