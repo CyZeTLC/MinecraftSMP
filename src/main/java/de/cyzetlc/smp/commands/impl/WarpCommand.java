@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import javax.sql.rowset.CachedRowSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 @CommandSpecification(
         command = "warp",
@@ -54,7 +55,17 @@ public class WarpCommand extends BaseCommand {
     }
 
     private boolean setWarp(Location location, String name) {
-        return false;
+        if (location.getWorld() == null) return false;
+
+        MinecraftSMP.getInstance().getQueryHandler().createBuilder(
+                        "INSERT INTO warps (name, world, x, y, z, yaw, pitch) VALUES (?, ?, ?, ?, ?, ?, ?) "
+                                + "ON DUPLICATE KEY UPDATE world = VALUES(world), x = VALUES(x), y = VALUES(y), "
+                                + "z = VALUES(z), yaw = VALUES(yaw), pitch = VALUES(pitch)"
+                ).addParameters(Arrays.asList(
+                        name.toLowerCase(), location.getWorld().getName(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch()
+                )).executeUpdateAsync();
+
+        return true;
     }
 
     private Location getWarpByName(String name) {
