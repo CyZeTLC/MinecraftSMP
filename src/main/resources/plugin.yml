@@ -1,4 +1,5 @@
 name: MinecraftSMP
+api-version: 26.3
 author: CyZeTLC
 version: 1.0
 main: de.cyzetlc.smp.MinecraftSMP
