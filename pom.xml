@@ -12,6 +12,7 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <lombok.version>1.18.46</lombok.version>
     </properties>
 
     <repositories>
@@ -26,7 +27,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.46</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -38,7 +39,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Hikari Datebase -->
+        <!-- Hikari Database -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
@@ -53,7 +54,7 @@
             <version>4.8.181</version>
         </dependency>
 
-        <!-- Source: https://mvnrepository.com/artifact/com.maxmind.geoip2/geoip2 -->
+        <!-- MaxMind GeoIP2 -->
         <dependency>
             <groupId>com.maxmind.geoip2</groupId>
             <artifactId>geoip2</artifactId>
@@ -64,10 +65,29 @@
 
     <build>
         <plugins>
+            <!-- Aktualisiertes Compiler-Plugin für Java 25 + Lombok Annotation Processing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Shade Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.6.2</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
