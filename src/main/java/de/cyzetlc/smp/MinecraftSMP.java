@@ -69,6 +69,8 @@ public class MinecraftSMP extends JavaPlugin {
         this.commandService.registerCommand(new StatsCommand());
         this.commandService.registerCommand(new WarpCommand());
         this.commandService.registerCommand(new EndCommand());
+        this.commandService.registerCommand(new HomeCommand());
+        this.commandService.registerCommand(new RTPCommand(this));
     }
 
     private void loadMySQL() {
