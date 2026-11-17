@@ -1,5 +1,8 @@
 {
   "displayConnectionMessages": true,
   "useCustomChatFormat": true,
-  "spawnRadius": 50
+  "spawnRadius": 50,
+  "maxHomes": 3,
+  "rtpMinDistance": 250,
+  "rtpMaxDistance": 2500
 }
