@@ -42,10 +42,11 @@ public class MinecraftSMP extends JavaPlugin {
         this.messageHandler = new MessageHandler();
         this.commandService = new CommandService();
         this.jsonConfig = new JsonConfig(this.getName() + "/config.json");
+        this.clanHandler = new ClanHandler();
 
         this.loadMySQL();
-        this.clanHandler = new ClanHandler();
         this.clanHandler.load();
+        this.messageHandler.loadMessages();
         this.loadListeners();
         this.loadCommands();
         this.loadEndEnabledSetting();
