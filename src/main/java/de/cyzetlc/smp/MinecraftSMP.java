@@ -75,7 +75,7 @@ public class MinecraftSMP extends JavaPlugin {
 
     public void loadEndEnabledSetting() {
         try (CachedRowSet rs = this.queryHandler.createBuilder("SELECT endEnabled FROM worldSettings").executeQuerySync()) {
-            endIsEnabled = rs.getBoolean("ebdEnabled");
+            endIsEnabled = rs.getBoolean("endEnabled");
         } catch (SQLException exception) {
             endIsEnabled = false;
         }
