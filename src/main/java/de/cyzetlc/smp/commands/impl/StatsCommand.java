@@ -12,8 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
 @CommandSpecification(
         command = "stats",
@@ -21,6 +20,8 @@ import java.util.Locale;
         cooldownType = CommandSpecification.TimeUnit.SECONDS
 )
 public class StatsCommand extends BaseCommand {
+    private static final int TOP_LIMIT = 10;
+
     @Override
     public void onCommand(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player p)) return;
@@ -33,6 +34,11 @@ public class StatsCommand extends BaseCommand {
         OfflinePlayer target = p;
 
         if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("top")) {
+                this.showTop(p);
+                return;
+            }
+
             target = Bukkit.getPlayerExact(args[0]);
 
             if (target == null) {
@@ -46,6 +52,30 @@ public class StatsCommand extends BaseCommand {
         }
 
         this.showStats(p, target);
+    }
+
+    private void showTop(Player p) {
+        List<OfflinePlayer> ranking = Arrays.stream(Bukkit.getOfflinePlayers())
+                .filter(OfflinePlayer::hasPlayedBefore)
+                .sorted(Comparator.comparingInt((OfflinePlayer o) -> o.getStatistic(Statistic.DAMAGE_DEALT)).reversed())
+                .limit(TOP_LIMIT)
+                .toList();
+
+        this.sendMessage(p, "smp.command.stats.separator");
+        this.sendMessage(p, "smp.command.stats.top.title", String.valueOf(TOP_LIMIT));
+
+        for (int i = 0; i < ranking.size(); i++) {
+            OfflinePlayer player = ranking.get(i);
+            this.sendMessage(
+                    p,
+                    "smp.command.stats.top.entry",
+                    String.valueOf(i + 1),
+                    this.safe(player.getName()),
+                    this.formatDamage(player.getStatistic(Statistic.DAMAGE_DEALT))
+            );
+        }
+
+        this.sendMessage(p, "smp.command.stats.separator");
     }
 
     private void showStats(Player viewer, OfflinePlayer target) {
